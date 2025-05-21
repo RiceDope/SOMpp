@@ -30,6 +30,7 @@
 #include <string>
 
 #include "../primitives/Array.h"
+#include "../primitives/Vector.h"
 #include "../primitives/Block.h"
 #include "../primitives/Class.h"
 #include "../primitives/Double.h"
@@ -47,6 +48,7 @@ PrimitiveLoader PrimitiveLoader::loader;
 
 PrimitiveLoader::PrimitiveLoader() {
     AddPrimitiveObject("Array", new _Array());
+    AddPrimitiveObject("Vector", new _Vector());
     AddPrimitiveObject("Block", new _Block());
     AddPrimitiveObject("Class", new _Class());
     AddPrimitiveObject("Double", new _Double());
