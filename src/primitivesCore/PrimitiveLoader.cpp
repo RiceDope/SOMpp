@@ -30,7 +30,6 @@
 #include <string>
 
 #include "../primitives/Array.h"
-#include "../primitives/Vector.h"
 #include "../primitives/Block.h"
 #include "../primitives/Class.h"
 #include "../primitives/Double.h"
@@ -41,6 +40,7 @@
 #include "../primitives/String.h"
 #include "../primitives/Symbol.h"
 #include "../primitives/System.h"
+#include "../primitives/Vector.h"
 #include "../vmobjects/ObjectFormats.h"
 #include "PrimitiveContainer.h"
 

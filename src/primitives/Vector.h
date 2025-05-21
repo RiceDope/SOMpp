@@ -4,6 +4,6 @@
 #include "../vmobjects/ObjectFormats.h"
 
 class _Vector : public PrimitiveContainer {
-    public:
-        _Vector();
+public:
+    _Vector();
 };

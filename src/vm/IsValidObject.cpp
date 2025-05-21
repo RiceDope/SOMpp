@@ -9,7 +9,6 @@
 #include "../vmobjects/AbstractObject.h"
 #include "../vmobjects/ObjectFormats.h"
 #include "../vmobjects/VMArray.h"
-#include "../vmobjects/VMVector.h"
 #include "../vmobjects/VMBlock.h"
 #include "../vmobjects/VMClass.h"  // NOLINT(misc-include-cleaner) it's required to make the types complete
 #include "../vmobjects/VMDouble.h"
@@ -22,6 +21,7 @@
 #include "../vmobjects/VMString.h"
 #include "../vmobjects/VMSymbol.h"
 #include "../vmobjects/VMTrivialMethod.h"
+#include "../vmobjects/VMVector.h"
 #include "Globals.h"
 
 static void* vt_array;

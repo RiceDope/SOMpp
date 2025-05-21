@@ -4,7 +4,6 @@
 
 #include "../vmobjects/VMInteger.h"
 #include "../vmobjects/VMObject.h"
-
 #include "VMArray.h"
 
 class VMVector : public VMObject {
