@@ -26,8 +26,15 @@ static vm_oop_t vecAtPut(vm_oop_t obj, vm_oop_t at, vm_oop_t put) {
     return put; // Return the value that was set
 }
 
+static vm_oop_t vecAppend(vm_oop_t obj, vm_oop_t arg) {
+    auto* self = static_cast<VMVector*>(obj);
+    self->Append(arg);
+    return self;
+}
+
 _Vector::_Vector() {
     Add("new:", &vecNew, true);
     Add("at:", &vecAt, false);
     Add("at:put:", &vecAtPut, false);
+    Add("append:", &vecAppend, false);
 }
