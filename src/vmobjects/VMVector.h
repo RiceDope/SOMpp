@@ -24,6 +24,18 @@ public:
         return returned;
     }
 
+    inline void SetIndexableField(size_t index, vm_oop_t value) {
+        int64_t const first = INT_VAL(load_ptr(this->first));
+        int64_t const last = INT_VAL(load_ptr(this->last));
+        VMArray* const storage = load_ptr(this->storage);
+        if (index < 1 || index > first + last) {
+            IndexOutOfBounds(index, (last - first));
+            // TODO(smarr): check if this would be correct
+        }
+        storage->SetIndexableField(first + index - 2, value);
+    }
+
+
     static __attribute__((noreturn)) __attribute__((noinline)) void
     IndexOutOfBounds(size_t idx, size_t size);
 

@@ -18,7 +18,16 @@ static vm_oop_t vecAt(vm_oop_t obj, vm_oop_t arg) {
     return self->GetIndexableField(index);
 }
 
+static vm_oop_t vecAtPut(vm_oop_t obj, vm_oop_t at, vm_oop_t put) {
+    auto* self = static_cast<VMVector*>(obj); // Cast itself as a VMVector
+    int64_t const index = INT_VAL(at); // Set the index looking for
+    // Call method to set the value at index. That deals with 1to0 indexing conversion
+    self->SetIndexableField(index, put);
+    return put; // Return the value that was set
+}
+
 _Vector::_Vector() {
     Add("new:", &vecNew, true);
     Add("at:", &vecAt, false);
+    Add("at:put:", &vecAtPut, false);
 }
