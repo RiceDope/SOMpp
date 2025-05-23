@@ -36,7 +36,7 @@ public:
     [[nodiscard]] inline vm_oop_t GetLast() {
         int64_t last = INT_VAL(load_ptr(this->last));
         int64_t first = INT_VAL(load_ptr(this->first));
-        vm_oop_t returned = GetIndexableField(last);
+        vm_oop_t returned = GetIndexableField(last-1);
         return returned;
     }
 
@@ -56,20 +56,21 @@ public:
         int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
 
-        if (last >= storage->GetNumberOfIndexableFields()) {
-            cout<<"RUNNING THIS"<<endl;
-            VMArray* newStorage = storage->CopyAndExtendWith(value);
+        if (last >= storage->GetNumberOfIndexableFields()) { // Expand the array
+            // Expand by the correct amount *2 by default in the native som implementation
+            VMArray * newStorage = Universe::NewArray(storage->GetNumberOfIndexableFields()*2);
+
+            storage->CopyIndexableFieldsTo(newStorage);
+            newStorage->SetIndexableField(last-1, value);
+            
             SetField(2 /* storage */, newStorage);
 
-        } else {
+        } else { // Just set the new value
             storage->SetIndexableField(last-1, value);
         }
 
         last += 1;
         this->last = store_ptr(this->last, NEW_INT(last));
-
-        cout<<"SPACE: "<<storage->GetNumberOfIndexableFields()<<endl;
-        cout<<"LAST: "<<last<<endl;
     }
 
 
