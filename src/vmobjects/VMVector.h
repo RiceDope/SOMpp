@@ -32,6 +32,13 @@ public:
         return returned;
     }
 
+    [[nodiscard]] inline vm_oop_t GetLast() {
+        int64_t last = INT_VAL(load_ptr(this->last));
+        int64_t first = INT_VAL(load_ptr(this->first));
+        vm_oop_t returned = GetIndexableField(last-first);
+        return returned;
+    }
+
     inline void SetIndexableField(size_t index, vm_oop_t value) {
         int64_t const first = INT_VAL(load_ptr(this->first));
         int64_t const last = INT_VAL(load_ptr(this->last));

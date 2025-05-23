@@ -37,10 +37,16 @@ static vm_oop_t vecFirst(vm_oop_t obj) {
     return self->GetFirst();
 }
 
+static vm_oop_t vecLast(vm_oop_t obj) {
+    auto* self = static_cast<VMVector*>(obj);
+    return self->GetLast();
+}
+
 _Vector::_Vector() {
     Add("new:", &vecNew, true);
     Add("at:", &vecAt, false);
     Add("at:put:", &vecAtPut, false);
     // Add("append:", &vecAppend, false);
     Add("first", &vecFirst, false);
+    Add("last", &vecLast, false);
 }
