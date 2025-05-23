@@ -26,6 +26,12 @@ public:
         return returned;
     }
 
+    [[nodiscard]] inline vm_oop_t GetFirst() {
+        int64_t first = INT_VAL(load_ptr(this->first));
+        vm_oop_t returned = GetIndexableField(1);
+        return returned;
+    }
+
     inline void SetIndexableField(size_t index, vm_oop_t value) {
         int64_t const first = INT_VAL(load_ptr(this->first));
         int64_t const last = INT_VAL(load_ptr(this->last));
@@ -39,25 +45,25 @@ public:
 
     inline void Append(vm_oop_t value) {
 
-    int64_t first = INT_VAL(load_ptr(this->first));
-    int64_t last = INT_VAL(load_ptr(this->last));
-    VMArray* storage = load_ptr(this->storage);
+        int64_t first = INT_VAL(load_ptr(this->first));
+        int64_t last = INT_VAL(load_ptr(this->last));
+        VMArray* storage = load_ptr(this->storage);
 
-    // Check if we need to expand capacity
-    if ((last) >= storage->GetNumberOfIndexableFields()) {
-        VMArray* newStorage = storage->CopyAndExtendWith(value);
-        this->storage = store_with_separate_barrier(newStorage);
-        write_barrier(this, this->storage);
+        // Check if we need to expand capacity
+        if ((last) >= storage->GetNumberOfIndexableFields()) {
+            VMArray* newStorage = storage->CopyAndExtendWith(value);
+            this->storage = store_with_separate_barrier(newStorage);
+            write_barrier(this, this->storage);
 
-    } else { // No need to expand
-        storage->SetIndexableField(last, value);
-        write_barrier(storage, value);
+        } else { // No need to expand
+            storage->SetIndexableField(last, value);
+            write_barrier(storage, value);
+        }
+
+        last = last + 1;
+        this->last = store_ptr(this->last, NEW_INT(last));
+
     }
-
-    last = last + 1;
-    this->last = store_ptr(this->last, NEW_INT(last));
-
-}
 
 
     static __attribute__((noreturn)) __attribute__((noinline)) void
