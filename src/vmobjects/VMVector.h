@@ -18,6 +18,7 @@ public:
         int64_t const first = INT_VAL(load_ptr(this->first));
         int64_t const last = INT_VAL(load_ptr(this->last));
         VMArray* const storage = load_ptr(this->storage);
+
         if (index < 1 || index > first + last) {
             IndexOutOfBounds(index, (last - first));
             // TODO(smarr): check if this would be correct
@@ -35,7 +36,7 @@ public:
     [[nodiscard]] inline vm_oop_t GetLast() {
         int64_t last = INT_VAL(load_ptr(this->last));
         int64_t first = INT_VAL(load_ptr(this->first));
-        vm_oop_t returned = GetIndexableField(last-first);
+        vm_oop_t returned = GetIndexableField(last);
         return returned;
     }
 
@@ -51,25 +52,24 @@ public:
     }
 
     inline void Append(vm_oop_t value) {
-
         int64_t first = INT_VAL(load_ptr(this->first));
         int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
 
-        // Check if we need to expand capacity
-        if ((last) >= storage->GetNumberOfIndexableFields()) {
+        if (last >= storage->GetNumberOfIndexableFields()) {
+            cout<<"RUNNING THIS"<<endl;
             VMArray* newStorage = storage->CopyAndExtendWith(value);
-            this->storage = store_with_separate_barrier(newStorage);
-            write_barrier(this, this->storage);
+            SetField(2 /* storage */, newStorage);
 
-        } else { // No need to expand
-            storage->SetIndexableField(last, value);
-            write_barrier(storage, value);
+        } else {
+            storage->SetIndexableField(last-1, value);
         }
 
-        last = last + 1;
+        last += 1;
         this->last = store_ptr(this->last, NEW_INT(last));
 
+        cout<<"SPACE: "<<storage->GetNumberOfIndexableFields()<<endl;
+        cout<<"LAST: "<<last<<endl;
     }
 
 
