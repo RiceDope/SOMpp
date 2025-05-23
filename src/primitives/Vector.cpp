@@ -36,5 +36,5 @@ _Vector::_Vector() {
     Add("new:", &vecNew, true);
     Add("at:", &vecAt, false);
     Add("at:put:", &vecAtPut, false);
-    Add("append:", &vecAppend, false);
+    // Add("append:", &vecAppend, false);
 }
