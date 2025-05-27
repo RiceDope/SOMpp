@@ -31,10 +31,8 @@
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMMethod.h"
 
-#define DISPATCH_NOGC()                                           \
-    {                                                             \
-        goto* loopTargets[currentBytecodes[bytecodeIndexGlobal]]; \
-    }
+#define DISPATCH_NOGC() \
+    { goto* loopTargets[currentBytecodes[bytecodeIndexGlobal]]; }
 
 #define DISPATCH_GC()                                             \
     {                                                             \
