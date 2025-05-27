@@ -76,6 +76,44 @@ public:
         this->last = store_ptr(this->last, NEW_INT(last));
     }
 
+    inline void RemoveLast() {
+        int64_t last = INT_VAL(load_ptr(this->last));
+        if (last <= 1) {
+            ErrorExit("Cannot remove last element from an empty vector.");
+        }
+        Remove(NEW_INT(last-1-1));
+    }
+
+    inline void RemoveFirst() {
+        // This method will just increment the first index
+        int64_t first = INT_VAL(load_ptr(this->first));
+        if (first >= INT_VAL(load_ptr(this->last))) {
+            ErrorExit("Cannot remove first element from an empty vector.");
+        }
+        first += 1;  // Increment the first index
+        this->first = store_ptr(this->first, NEW_INT(first));
+    }
+
+    inline void Remove(vm_oop_t inx) {
+        int64_t first = INT_VAL(load_ptr(this->first));
+        int64_t last = INT_VAL(load_ptr(this->last));
+        VMArray* storage = load_ptr(this->storage);
+        int64_t index = INT_VAL(inx);
+
+        if (index < 0 || index > last - first) {
+            IndexOutOfBounds(index, (last - first));
+        }
+
+        // Shift all elements after the index to the left
+        for (size_t i = index; i < last - first; ++i) {
+            storage->SetIndexableField(first + i - 1,
+                                       storage->GetIndexableField(first + i));
+        }
+
+        last -= 1;
+        this->last = store_ptr(this->last, NEW_INT(last));
+    }
+
     static __attribute__((noreturn)) __attribute__((noinline)) void
     IndexOutOfBounds(size_t idx, size_t size);
 
