@@ -46,13 +46,18 @@ static vm_oop_t vecLast(vm_oop_t obj) {
 static vm_oop_t removeLast(vm_oop_t obj) {
     auto* self = static_cast<VMVector*>(obj);
     self->RemoveLast();
-    return self;  // Return the value that was removed
+    return self;
 }
 
 static vm_oop_t removeFirst(vm_oop_t obj) {
     auto* self = static_cast<VMVector*>(obj);
-    self->RemoveFirst();  // Remove the first element
-    return self;               // Return the value that was removed
+    self->RemoveFirst();
+    return self;
+}
+
+static vm_oop_t contains(vm_oop_t obj, vm_oop_t other) {
+    auto* self = static_cast<VMVector*>(obj);
+    return self->contains(other);
 }
 
 _Vector::_Vector() {
@@ -64,4 +69,5 @@ _Vector::_Vector() {
     Add("last", &vecLast, false);
     Add("remove", &removeLast, false);
     Add("removeFirst", &removeFirst, false);
+    Add("contains:", &contains, false);
 }
