@@ -94,7 +94,8 @@ public:
         this->first = store_ptr(this->first, NEW_INT(first));
     }
 
-    inline vm_oop_t contains(vm_oop_t other) {
+    /* Return the index if object is located, else return -1 for not found*/
+    inline vm_oop_t IndexOf(vm_oop_t other) {
         int64_t first = INT_VAL(load_ptr(this->first));
         int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
@@ -107,7 +108,7 @@ public:
 
             // Check where integers are tagged or references can be checked
             if (current == other) {
-                return load_ptr(trueObject);
+                return NEW_INT(i - first + 2);
             }
 
             // Check where internal values matter i.e. Strings
@@ -115,12 +116,21 @@ public:
                 AbstractVMObject* currentObj = AS_OBJ(current);
 
                 if (currentObj->AsDebugString() == otherObj->AsDebugString()) {
-                    return load_ptr(trueObject);
+                    return NEW_INT(i - first + 2);
                 }
             }
 
         }
-        return load_ptr(falseObject);
+        return NEW_INT(-1);
+    }
+
+    inline vm_oop_t contains(vm_oop_t other) {
+        vm_oop_t where = IndexOf(other);
+        if (INT_VAL(where) < 0) {
+            return load_ptr(falseObject);
+        } else {
+            return load_ptr(trueObject);
+        }
     }
 
     inline void Remove(vm_oop_t inx) {

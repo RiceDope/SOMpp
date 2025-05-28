@@ -60,6 +60,11 @@ static vm_oop_t contains(vm_oop_t obj, vm_oop_t other) {
     return self->contains(other);
 }
 
+static vm_oop_t indexOf(vm_oop_t obj, vm_oop_t other) {
+    auto* self = static_cast<VMVector*>(obj);
+    return self->IndexOf(other);
+}
+
 _Vector::_Vector() {
     Add("new:", &vecNew, true);
     Add("at:", &vecAt, false);
@@ -70,4 +75,5 @@ _Vector::_Vector() {
     Add("remove", &removeLast, false);
     Add("removeFirst", &removeFirst, false);
     Add("contains:", &contains, false);
+    Add("indexOf:", &indexOf, false);
 }
