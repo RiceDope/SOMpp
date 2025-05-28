@@ -19,7 +19,7 @@ public:
         int64_t const last = INT_VAL(load_ptr(this->last));
         VMArray* const storage = load_ptr(this->storage);
 
-        if (index < 1 || index > first + last) {
+        if (index < 1 || index > last - first) { // Check this error handling again
             IndexOutOfBounds(index, (last - first));
             // TODO(smarr): check if this would be correct
         }
