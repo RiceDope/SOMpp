@@ -14,6 +14,7 @@ public:
 
     explicit VMVector(vm_oop_t first, vm_oop_t last, VMArray* storage);
 
+    /* handles 1 - 0 indexing*/
     [[nodiscard]] inline vm_oop_t GetIndexableField(size_t index) {
         int64_t const first = INT_VAL(load_ptr(this->first));
         int64_t const last = INT_VAL(load_ptr(this->last));
@@ -76,22 +77,24 @@ public:
         this->last = store_ptr(this->last, NEW_INT(last));
     }
 
-    inline void RemoveLast() {
+    inline vm_oop_t RemoveLast() {
         int64_t last = INT_VAL(load_ptr(this->last));
         if (last <= 1) {
             ErrorExit("Cannot remove last element from an empty vector.");
         }
-        Remove(NEW_INT(last-1-1));
+        return Remove(NEW_INT(last-1-1));
     }
 
-    inline void RemoveFirst() {
+    inline vm_oop_t RemoveFirst() {
         // This method will just increment the first index
         int64_t first = INT_VAL(load_ptr(this->first));
         if (first >= INT_VAL(load_ptr(this->last))) {
             ErrorExit("Cannot remove first element from an empty vector.");
         }
+        vm_oop_t itemToRemove = GetIndexableField(1); // This is 1 because GetIndexableField handles 1 to 0 indexing
         first += 1;  // Increment the first index
         this->first = store_ptr(this->first, NEW_INT(first));
+        return itemToRemove;
     }
 
     /* Return the index if object is located, else return -1 for not found*/
@@ -124,7 +127,7 @@ public:
         return NEW_INT(-1);
     }
 
-    inline vm_oop_t contains(vm_oop_t other) {
+    [[nodiscard]] inline vm_oop_t contains(vm_oop_t other) {
         vm_oop_t where = IndexOf(other);
         if (INT_VAL(where) < 0) {
             return load_ptr(falseObject);
@@ -133,7 +136,7 @@ public:
         }
     }
 
-    inline void Remove(vm_oop_t inx) {
+    [[nodiscard]] inline vm_oop_t Remove(vm_oop_t inx) {
         int64_t first = INT_VAL(load_ptr(this->first));
         int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
@@ -143,6 +146,8 @@ public:
             IndexOutOfBounds(index, (last - first));
         }
 
+        vm_oop_t itemToRemove = GetIndexableField(last-1);
+
         // Shift all elements after the index to the left
         for (size_t i = index; i < last - first; ++i) {
             storage->SetIndexableField(first + i - 1,
@@ -151,6 +156,8 @@ public:
 
         last -= 1;
         this->last = store_ptr(this->last, NEW_INT(last));
+
+        return itemToRemove;
     }
 
     static __attribute__((noreturn)) __attribute__((noinline)) void

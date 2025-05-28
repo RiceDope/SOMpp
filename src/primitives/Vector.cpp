@@ -45,14 +45,12 @@ static vm_oop_t vecLast(vm_oop_t obj) {
 
 static vm_oop_t removeLast(vm_oop_t obj) {
     auto* self = static_cast<VMVector*>(obj);
-    self->RemoveLast();
-    return self;
+    return self->RemoveLast();
 }
 
 static vm_oop_t removeFirst(vm_oop_t obj) {
     auto* self = static_cast<VMVector*>(obj);
-    self->RemoveFirst();
-    return self;
+    return self->RemoveFirst();
 }
 
 static vm_oop_t contains(vm_oop_t obj, vm_oop_t other) {
