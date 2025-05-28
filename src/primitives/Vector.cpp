@@ -63,6 +63,11 @@ static vm_oop_t indexOf(vm_oop_t obj, vm_oop_t other) {
     return self->IndexOf(other);
 }
 
+static vm_oop_t vecSize(vm_oop_t obj) {
+    auto* self = static_cast<VMVector*>(obj);
+    return self->Size();
+}
+
 _Vector::_Vector() {
     Add("new:", &vecNew, true);
     Add("at:", &vecAt, false);
@@ -74,4 +79,5 @@ _Vector::_Vector() {
     Add("removeFirst", &removeFirst, false);
     Add("contains:", &contains, false);
     Add("indexOf:", &indexOf, false);
+    Add("size", &vecSize, false);
 }

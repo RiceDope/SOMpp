@@ -24,7 +24,7 @@ public:
             IndexOutOfBounds(index, (last - first));
             // TODO(smarr): check if this would be correct
         }
-        vm_oop_t returned = storage->GetIndexableField(first + index - 2);
+        vm_oop_t returned = storage->GetIndexableField((first - 1) + (index - 1)); // Convert to 0-indexing
         return returned;
     }
 
@@ -79,10 +79,11 @@ public:
 
     inline vm_oop_t RemoveLast() {
         int64_t last = INT_VAL(load_ptr(this->last));
+        int64_t first = INT_VAL(load_ptr(this->first));
         if (last <= 1) {
             ErrorExit("Cannot remove last element from an empty vector.");
         }
-        return Remove(NEW_INT(last-1-1));
+        return Remove(NEW_INT(last - first)); // Last-First gives the (User) index of the last element in 1-indexing
     }
 
     inline vm_oop_t RemoveFirst() {
@@ -142,11 +143,15 @@ public:
         VMArray* storage = load_ptr(this->storage);
         int64_t index = INT_VAL(inx);
 
-        if (index < 0 || index > last - first) {
+        if ((last - first) != 0 && index == 0) {
+            index = index;
+        }
+
+        if (index < 1 || index > last - first) {
             IndexOutOfBounds(index, (last - first));
         }
 
-        vm_oop_t itemToRemove = GetIndexableField(last-1);
+        vm_oop_t itemToRemove = GetIndexableField(index);
 
         // Shift all elements after the index to the left
         for (size_t i = index; i < last - first; ++i) {
@@ -158,6 +163,12 @@ public:
         this->last = store_ptr(this->last, NEW_INT(last));
 
         return itemToRemove;
+    }
+
+    [[nodiscard]] inline vm_oop_t Size() {
+        int64_t first = INT_VAL(load_ptr(this->first));
+        int64_t last = INT_VAL(load_ptr(this->last));
+        return NEW_INT(last - first);
     }
 
     static __attribute__((noreturn)) __attribute__((noinline)) void
