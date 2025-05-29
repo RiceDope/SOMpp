@@ -188,6 +188,22 @@ public:
         return NEW_INT(last - first);
     }
 
+    [[nodiscard]] inline vm_oop_t StorageArray() {
+        int64_t first = INT_VAL(load_ptr(this->first));
+        int64_t last = INT_VAL(load_ptr(this->last));
+        VMArray* storage = load_ptr(this->storage);
+
+
+        VMArray* result = Universe::NewArray(last - first);
+        for (int64_t i = first-1; i < last - 1; ++i) {
+            result->SetIndexableField(i - first + 1,
+                                      storage->GetIndexableField(i));
+        }
+
+        return result;
+
+    }
+
     static __attribute__((noreturn)) __attribute__((noinline)) void
     IndexOutOfBounds(size_t idx, size_t size);
 

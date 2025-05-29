@@ -73,6 +73,11 @@ static vm_oop_t vecSize(vm_oop_t obj) {
     return self->Size();
 }
 
+static vm_oop_t asArray(vm_oop_t obj) {
+    auto* self = static_cast<VMVector*>(obj);
+    return self->StorageArray();
+}
+
 _Vector::_Vector() {
     Add("new:", &vecNew, true);
     Add("at:", &vecAt, false);
@@ -86,4 +91,5 @@ _Vector::_Vector() {
     Add("indexOf:", &indexOf, false);
     Add("size", &vecSize, false);
     Add("remove:", &removeObject, false);
+    Add("asArray", &asArray, false);
 }
