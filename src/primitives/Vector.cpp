@@ -7,7 +7,12 @@
 #include "../vmobjects/VMFrame.h"
 #include "../vmobjects/VMVector.h"
 
-static vm_oop_t vecNew(vm_oop_t /*unused*/, vm_oop_t arg) {
+static vm_oop_t vecNew(vm_oop_t /*unused*/) {
+    int64_t const size = 50;
+    return Universe::NewVector(size);
+}
+
+static vm_oop_t vecNewSize(vm_oop_t /*unused*/, vm_oop_t arg) {
     int64_t const size = INT_VAL(arg);
     return Universe::NewVector(size);
 }
@@ -79,7 +84,8 @@ static vm_oop_t asArray(vm_oop_t obj) {
 }
 
 _Vector::_Vector() {
-    Add("new:", &vecNew, true);
+    Add("new", &vecNew, true);
+    Add("new:", &vecNewSize, true);
     Add("at:", &vecAt, false);
     Add("at:put:", &vecAtPut, false);
     Add("append:", &vecAppend, false);
