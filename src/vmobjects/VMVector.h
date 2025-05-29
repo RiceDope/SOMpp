@@ -30,14 +30,12 @@ public:
     }
 
     [[nodiscard]] inline vm_oop_t GetFirst() {
-        int64_t first = INT_VAL(load_ptr(this->first));
         vm_oop_t returned = GetIndexableField(1);
         return returned;
     }
 
     [[nodiscard]] inline vm_oop_t GetLast() {
-        int64_t last = INT_VAL(load_ptr(this->last));
-        int64_t first = INT_VAL(load_ptr(this->first));
+        const int64_t last = INT_VAL(load_ptr(this->last));
         vm_oop_t returned = GetIndexableField(last - 1);
         return returned;
     }
@@ -54,7 +52,6 @@ public:
     }
 
     inline void Append(vm_oop_t value) {
-        int64_t first = INT_VAL(load_ptr(this->first));
         int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
 
@@ -79,8 +76,8 @@ public:
     }
 
     inline vm_oop_t RemoveLast() {
-        int64_t last = INT_VAL(load_ptr(this->last));
-        int64_t first = INT_VAL(load_ptr(this->first));
+        const int64_t last = INT_VAL(load_ptr(this->last));
+        const int64_t first = INT_VAL(load_ptr(this->first));
         if (last == first) {
             vm_oop_t errorMsg = Universe::NewString("Vector: error when removing Last item.");
             vm_oop_t args[1] = { errorMsg };
@@ -92,7 +89,6 @@ public:
     inline vm_oop_t RemoveFirst() {
         // This method will just increment the first index
         int64_t first = INT_VAL(load_ptr(this->first));
-        int64_t last = INT_VAL(load_ptr(this->last));
         if (first >= INT_VAL(load_ptr(this->last))) {
             vm_oop_t errorMsg = Universe::NewString("Vector: error when removing First item.");
             vm_oop_t args[1] = { errorMsg };
@@ -105,11 +101,11 @@ public:
     }
 
     inline vm_oop_t RemoveObj(vm_oop_t other) {
-        int64_t first = INT_VAL(load_ptr(this->first));
-        int64_t last = INT_VAL(load_ptr(this->last));
+        const int64_t first = INT_VAL(load_ptr(this->first));
+        const int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
 
-        for (int i = first - 1; i < last - 1; ++i) {
+        for (int64_t i = first - 1; i < last - 1; ++i) {
             vm_oop_t current = storage->GetIndexableField(i);
 
             // Check where integers are tagged or references can be checked
@@ -123,8 +119,8 @@ public:
 
     /* Return the index if object is located, else return -1 for not found*/
     inline vm_oop_t IndexOf(vm_oop_t other) {
-        int64_t first = INT_VAL(load_ptr(this->first));
-        int64_t last = INT_VAL(load_ptr(this->last));
+        const int64_t first = INT_VAL(load_ptr(this->first));
+        const int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
 
         AbstractVMObject* otherObj = AS_OBJ(other);
@@ -152,16 +148,18 @@ public:
     }
 
     [[nodiscard]] inline vm_oop_t contains(vm_oop_t other) {
+
         vm_oop_t where = IndexOf(other);
         if (INT_VAL(where) < 0) {
             return load_ptr(falseObject);
-        } else {
-            return load_ptr(trueObject);
         }
+
+        return load_ptr(trueObject);
+        
     }
 
     inline vm_oop_t Remove(vm_oop_t inx) {
-        int64_t first = INT_VAL(load_ptr(this->first));
+        const int64_t first = INT_VAL(load_ptr(this->first));
         int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
         int64_t index = INT_VAL(inx);
@@ -189,14 +187,14 @@ public:
     }
 
     [[nodiscard]] inline vm_oop_t Size() {
-        int64_t first = INT_VAL(load_ptr(this->first));
-        int64_t last = INT_VAL(load_ptr(this->last));
+        const int64_t first = INT_VAL(load_ptr(this->first));
+        const int64_t last = INT_VAL(load_ptr(this->last));
         return NEW_INT(last - first);
     }
 
     [[nodiscard]] inline vm_oop_t StorageArray() {
-        int64_t first = INT_VAL(load_ptr(this->first));
-        int64_t last = INT_VAL(load_ptr(this->last));
+        const int64_t first = INT_VAL(load_ptr(this->first));
+        const int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
 
 
