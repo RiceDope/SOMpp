@@ -36,21 +36,21 @@ void AbstractVMObject::Send(const std::string& selectorString,
 
 /* Send but then return the result of the send */
 vm_oop_t AbstractVMObject::SendWithResult(const std::string& selectorString,
-                                  vm_oop_t* arguments, size_t argc) {
-  VMFrame* frame = Interpreter::GetFrame();
-  VMSymbol* selector = SymbolFor(selectorString);
+                                          vm_oop_t* arguments, size_t argc) {
+    VMFrame* frame = Interpreter::GetFrame();
+    VMSymbol* selector = SymbolFor(selectorString);
 
-  frame->Push(this);
-  for (size_t i = 0; i < argc; ++i) {
-      frame->Push(arguments[i]);
-  }
+    frame->Push(this);
+    for (size_t i = 0; i < argc; ++i) {
+        frame->Push(arguments[i]);
+    }
 
-  VMClass* cl = GetClass();
-  VMInvokable* invokable = cl->LookupInvokable(selector);
+    VMClass* cl = GetClass();
+    VMInvokable* invokable = cl->LookupInvokable(selector);
 
-  invokable->Invoke(frame);
+    invokable->Invoke(frame);
 
-  return frame->Pop();
+    return frame->Pop();
 }
 
 int64_t AbstractVMObject::GetFieldIndex(VMSymbol* fieldName) const {

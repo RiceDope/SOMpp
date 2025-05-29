@@ -22,21 +22,24 @@ VMVector::VMVector(vm_oop_t first, vm_oop_t last, VMArray* storage)
 }
 
 /* Rename as a more specifc error function */
-void VMVector::IndexOutOfBounds(size_t idx, size_t size, const std::string& errorMessage) {
+void VMVector::IndexOutOfBounds(size_t idx, size_t size,
+                                const std::string& errorMessage) {
     // Construct the error message string
-    const std::string msg = errorMessage + " Index: " + std::to_string(idx) +
-                      ", but vector size is only: " + std::to_string(size);
+    const std::string msg =
+        errorMessage + " Index: " + std::to_string(idx) +
+        ", but vector size is only: " + std::to_string(size);
 
     // Create a SOM symbol for the error message
     vm_oop_t errorMsg = Universe::NewString(msg);
 
     // Arguments array for 'error:'
-    vm_oop_t args[1] = { errorMsg };
+    vm_oop_t args[1] = {errorMsg};
 
     // Send 'error:' message to self (this VMVector)
     this->Send("error:", args, 1);
 
     // Execution shouldn't reach here if 'error:' raises an error in SOM
-    ErrorExit("VMVector::IndexOutOfBounds: Execution should not reach after sending 'error'");
-
+    ErrorExit(
+        "VMVector::IndexOutOfBounds: Execution should not reach after sending "
+        "'error'");
 }

@@ -21,11 +21,14 @@ public:
         int64_t const last = INT_VAL(load_ptr(this->last));
         VMArray* const storage = load_ptr(this->storage);
 
-        if (index < 1 || index > last - first) { // Check this error handling again
-            IndexOutOfBounds(index, (last - first), "Vector: error when getting an item.");
+        if (index < 1 ||
+            index > last - first) {  // Check this error handling again
+            IndexOutOfBounds(
+                index, (last - first), "Vector: error when getting an item.");
             // TODO(smarr): check if this would be correct
         }
-        vm_oop_t returned = storage->GetIndexableField((first - 1) + (index - 1)); // Convert to 0-indexing
+        vm_oop_t returned = storage->GetIndexableField(
+            (first - 1) + (index - 1));  // Convert to 0-indexing
         return returned;
     }
 
@@ -45,7 +48,8 @@ public:
         int64_t const last = INT_VAL(load_ptr(this->last));
         VMArray* const storage = load_ptr(this->storage);
         if (index < 1 || index > first + last) {
-            IndexOutOfBounds(index, (last - first), "Vector: error when setting an item.");
+            IndexOutOfBounds(
+                index, (last - first), "Vector: error when setting an item.");
             // TODO(smarr): check if this would be correct
         }
         storage->SetIndexableField(first + index - 2, value);
@@ -79,22 +83,32 @@ public:
         const int64_t last = INT_VAL(load_ptr(this->last));
         const int64_t first = INT_VAL(load_ptr(this->first));
         if (last == first) {
-            vm_oop_t errorMsg = Universe::NewString("Vector: error when removing Last item.");
-            vm_oop_t args[1] = { errorMsg };
-            return this->SendWithResult("error:", args, 1);
+            VMFrame* frame = Interpreter::GetFrame();
+            vm_oop_t errorMsg =
+                Universe::NewString("Vector: error when removing Last item.");
+            vm_oop_t args[1] = {errorMsg};
+            this->Send("error:", args, 1);
+            return frame->Pop();
         }
-        return Remove(NEW_INT(last - first)); // Last-First gives the (User) index of the last element in 1-indexing
+        return Remove(
+            NEW_INT(last - first));  // Last-First gives the (User) index of the
+                                     // last element in 1-indexing
     }
 
     inline vm_oop_t RemoveFirst() {
         // This method will just increment the first index
         int64_t first = INT_VAL(load_ptr(this->first));
         if (first >= INT_VAL(load_ptr(this->last))) {
-            vm_oop_t errorMsg = Universe::NewString("Vector: error when removing First item.");
-            vm_oop_t args[1] = { errorMsg };
-            return this->SendWithResult("error:", args, 1);
+            VMFrame* frame = Interpreter::GetFrame();
+
+            vm_oop_t errorMsg =
+                Universe::NewString("Vector: error when removing First item.");
+            vm_oop_t args[1] = {errorMsg};
+            this->Send("error:", args, 1);
+            return frame->Pop();
         }
-        vm_oop_t itemToRemove = GetIndexableField(1); // This is 1 because GetIndexableField handles 1 to 0 indexing
+        vm_oop_t itemToRemove = GetIndexableField(
+            1);  // This is 1 because GetIndexableField handles 1 to 0 indexing
         first += 1;  // Increment the first index
         this->first = store_ptr(this->first, NEW_INT(first));
         return itemToRemove;
@@ -110,7 +124,7 @@ public:
 
             // Check where integers are tagged or references can be checked
             if (current == other) {
-                Remove(NEW_INT(i - first + 2)); // Convert to 1-indexing
+                Remove(NEW_INT(i - first + 2));  // Convert to 1-indexing
                 return load_ptr(trueObject);
             }
         }
@@ -126,7 +140,7 @@ public:
         AbstractVMObject* otherObj = AS_OBJ(other);
 
         // Iterate through from first-1 (inclusive) to last-1 (Not inclusive)
-        for (int64_t i = first-1; i < last - 1; ++i) {
+        for (int64_t i = first - 1; i < last - 1; ++i) {
             vm_oop_t current = storage->GetIndexableField(i);
 
             // Check where integers are tagged or references can be checked
@@ -142,20 +156,17 @@ public:
                     return NEW_INT(i - first + 2);
                 }
             }
-
         }
         return NEW_INT(-1);
     }
 
     [[nodiscard]] inline vm_oop_t contains(vm_oop_t other) {
-
         vm_oop_t where = IndexOf(other);
         if (INT_VAL(where) < 0) {
             return load_ptr(falseObject);
         }
 
         return load_ptr(trueObject);
-        
     }
 
     inline vm_oop_t Remove(vm_oop_t inx) {
@@ -169,7 +180,8 @@ public:
         }
 
         if (index < 1 || index > last - first) {
-            IndexOutOfBounds(index, (last - first), "Vector: error when removing an item.");
+            IndexOutOfBounds(
+                index, (last - first), "Vector: error when removing an item.");
         }
 
         vm_oop_t itemToRemove = GetIndexableField(index);
@@ -197,15 +209,13 @@ public:
         const int64_t last = INT_VAL(load_ptr(this->last));
         VMArray* storage = load_ptr(this->storage);
 
-
         VMArray* result = Universe::NewArray(last - first);
-        for (int64_t i = first-1; i < last - 1; ++i) {
+        for (int64_t i = first - 1; i < last - 1; ++i) {
             result->SetIndexableField(i - first + 1,
                                       storage->GetIndexableField(i));
         }
 
         return result;
-
     }
 
     __attribute__((noreturn)) __attribute__((noinline)) void
