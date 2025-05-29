@@ -2,12 +2,12 @@
 
 #include <cstddef>
 
+#include "../vm/Symbols.h"
 #include "../vm/Universe.h"
 #include "../vmobjects/VMInteger.h"
 #include "../vmobjects/VMObject.h"
 #include "ObjectFormats.h"
 #include "VMArray.h"
-#include "../vm/Symbols.h"
 
 class VMVector : public VMObject {
 public:
@@ -212,10 +212,6 @@ public:
 
     __attribute__((noreturn)) __attribute__((noinline)) void
     IndexOutOfBounds(size_t idx, size_t size, string errorMessage);
-
-    vm_oop_t SendWithResult(const std::string& selectorString,
-                            vm_oop_t* arguments,
-                            size_t argc);
 
 private:
     static const size_t VMVectorNumberOfFields;

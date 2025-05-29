@@ -31,6 +31,9 @@ public:
     [[nodiscard]] virtual AbstractVMObject* CloneForMovingGC() const = 0;
     void Send(const std::string& selectorString, vm_oop_t* arguments,
               size_t argc);
+    vm_oop_t SendWithResult(const std::string& selectorString,
+                vm_oop_t* arguments,
+                size_t argc);
 
     /** Size in bytes of the object. */
     [[nodiscard]] virtual size_t GetObjectSize() const = 0;
