@@ -209,7 +209,7 @@ public:
     }
 
     __attribute__((noreturn)) __attribute__((noinline)) void
-    IndexOutOfBounds(size_t idx, size_t size, string errorMessage);
+    IndexOutOfBounds(size_t idx, size_t size, const std::string& errorMessage);
 
 private:
     static const size_t VMVectorNumberOfFields;

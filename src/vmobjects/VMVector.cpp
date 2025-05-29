@@ -7,8 +7,8 @@
 
 #include "../misc/defs.h"
 #include "../vm/Print.h"
+#include "../vm/Universe.h"
 #include "../vmobjects/ObjectFormats.h"
-#include "VMVector.h"
 
 const size_t VMVector::VMVectorNumberOfFields = 3;
 
@@ -22,9 +22,9 @@ VMVector::VMVector(vm_oop_t first, vm_oop_t last, VMArray* storage)
 }
 
 /* Rename as a more specifc error function */
-void VMVector::IndexOutOfBounds(size_t idx, size_t size, string errorMessage) {
+void VMVector::IndexOutOfBounds(size_t idx, size_t size, const std::string& errorMessage) {
     // Construct the error message string
-    std::string msg = errorMessage + " Index: " + std::to_string(idx) +
+    const std::string msg = errorMessage + " Index: " + std::to_string(idx) +
                       ", but vector size is only: " + std::to_string(size);
 
     // Create a SOM symbol for the error message
