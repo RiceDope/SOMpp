@@ -24,7 +24,7 @@ public:
         if (index < 1 ||
             index > last - first) {  // Check this error handling again
             IndexOutOfBounds(
-                index, (last - first), "Vector: error when getting an item.");
+                index, (last - first));
             // TODO(smarr): check if this would be correct
         }
         vm_oop_t returned = storage->GetIndexableField(
@@ -49,7 +49,7 @@ public:
         VMArray* const storage = load_ptr(this->storage);
         if (index < 1 || index > first + last) {
             IndexOutOfBounds(
-                index, (last - first), "Vector: error when setting an item.");
+                index, (last - first));
             // TODO(smarr): check if this would be correct
         }
         storage->SetIndexableField(first + index - 2, value);
@@ -82,7 +82,11 @@ public:
     inline vm_oop_t RemoveLast() {
         const int64_t last = INT_VAL(load_ptr(this->last));
         const int64_t first = INT_VAL(load_ptr(this->first));
+
+        // Throw an error correctly (error: method in som)
         if (last == first) {
+
+            // VMSafe*Primitive::Invoke will push it right back to the same frame
             VMFrame* frame = Interpreter::GetFrame();
             vm_oop_t errorMsg =
                 Universe::NewString("Vector: error when removing Last item.");
@@ -98,9 +102,12 @@ public:
     inline vm_oop_t RemoveFirst() {
         // This method will just increment the first index
         int64_t first = INT_VAL(load_ptr(this->first));
-        if (first >= INT_VAL(load_ptr(this->last))) {
-            VMFrame* frame = Interpreter::GetFrame();
 
+        // Throw an error correctly (error: method in som)
+        if (first >= INT_VAL(load_ptr(this->last))) {
+
+            // VMSafe*Primitive::Invoke will push it right back to the same frame
+            VMFrame* frame = Interpreter::GetFrame();
             vm_oop_t errorMsg =
                 Universe::NewString("Vector: error when removing First item.");
             vm_oop_t args[1] = {errorMsg};
@@ -181,7 +188,7 @@ public:
 
         if (index < 1 || index > last - first) {
             IndexOutOfBounds(
-                index, (last - first), "Vector: error when removing an item.");
+                index, (last - first));
         }
 
         vm_oop_t itemToRemove = GetIndexableField(index);
@@ -218,8 +225,7 @@ public:
         return result;
     }
 
-    __attribute__((noreturn)) __attribute__((noinline)) void
-    IndexOutOfBounds(size_t idx, size_t size, const std::string& errorMessage);
+    __attribute__((noreturn)) __attribute__((noinline)) void IndexOutOfBounds(size_t idx, size_t size);
 
 private:
     static const size_t VMVectorNumberOfFields;
