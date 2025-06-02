@@ -31,7 +31,6 @@ vm_oop_t VMVector::GetIndexableField(size_t index) {
 
     if (index < 1 || index > last - first) {  // Check this error handling again
         IndexOutOfBounds(index, (last - first));
-        // TODO(smarr): check if this would be correct
     }
     vm_oop_t returned = storage->GetIndexableField(
         (first - 1) + (index - 1));  // Convert to 0-indexing
@@ -44,7 +43,6 @@ void VMVector::SetIndexableField(size_t index, vm_oop_t value) {
     VMArray* const storage = load_ptr(this->storage);
     if (index < 1 || index > first + last) {
         IndexOutOfBounds(index, (last - first));
-        // TODO(smarr): check if this would be correct
     }
     storage->SetIndexableField(first + index - 2, value);
 }
