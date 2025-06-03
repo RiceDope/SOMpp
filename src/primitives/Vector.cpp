@@ -76,18 +76,18 @@ static vm_oop_t asArray(vm_oop_t obj) {
 }
 
 _Vector::_Vector() {
-    #ifdef USE_VECTOR_PRIMITIVES
-        Add("new", &vecNew, true);
-        Add("new:", &vecNewSize, true);
-        Add("at:", &vecAt, false);
-        Add("at:put:", &vecAtPut, false);
-        Add("append:", &vecAppend, false);  
-        Add("first", &vecFirst, false);
-        Add("last", &vecLast, false);
-        Add("remove", &removeLast, false);
-        Add("removeFirst", &removeFirst, false);
-        Add("size", &vecSize, false);
-        Add("remove:", &removeObject, false);
-        Add("asArray", &asArray, false);
-    #endif
+#ifdef USE_VECTOR_PRIMITIVES
+    Add("new", &vecNew, true);
+    Add("new:", &vecNewSize, true);
+    Add("at:", &vecAt, false);
+    Add("at:put:", &vecAtPut, false);
+    Add("append:", &vecAppend, false);
+    Add("first", &vecFirst, false);
+    Add("last", &vecLast, false);
+    Add("remove", &removeLast, false);
+    Add("removeFirst", &removeFirst, false);
+    Add("size", &vecSize, false);
+    Add("remove:", &removeObject, false);
+    Add("asArray", &asArray, false);
+#endif
 }
