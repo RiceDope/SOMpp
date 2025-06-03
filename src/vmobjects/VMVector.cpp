@@ -157,36 +157,6 @@ vm_oop_t VMVector::Remove(vm_oop_t inx) {
     return itemToRemove;
 }
 
-vm_oop_t VMVector::IndexOf(vm_oop_t other) {
-    const int64_t first = INT_VAL(load_ptr(this->first));
-    const int64_t last = INT_VAL(load_ptr(this->last));
-    VMArray* storage = load_ptr(this->storage);
-
-    AbstractVMObject* otherObj = AS_OBJ(other);
-
-    // Iterate through from first-1 (inclusive) to last-1 (Not inclusive)
-    for (int64_t i = first - 1; i < last - 1; ++i) {
-        vm_oop_t current = storage->GetIndexableField(i);
-
-        // Check where internal values matter i.e. Strings
-        if (!IS_TAGGED(current) && !IS_TAGGED(other)) {
-            AbstractVMObject* currentObj = AS_OBJ(current);
-            cout<<"Taking tagged route: "<< currentObj->AsDebugString() << " vs "
-                << otherObj->AsDebugString() << endl;
-            if (currentObj->AsDebugString() == otherObj->AsDebugString()) {
-                return NEW_INT(i - first + 2);
-            }
-        }
-
-        // Check where integers are tagged or references can be checked
-        if (current == other) {
-            cout<<"Running tagged route:"<<endl;
-            return NEW_INT(i - first + 2);
-        }
-    }
-    return NEW_INT(-1);
-}
-
 vm_oop_t VMVector::StorageArray() {
     const int64_t first = INT_VAL(load_ptr(this->first));
     const int64_t last = INT_VAL(load_ptr(this->last));
