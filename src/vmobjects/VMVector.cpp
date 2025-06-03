@@ -37,6 +37,7 @@ vm_oop_t VMVector::GetIndexableField(size_t index) {
     return returned;
 }
 
+/* Returns the value currently held at that location */
 vm_oop_t VMVector::SetIndexableField(size_t index, vm_oop_t value) {
     int64_t const first = INT_VAL(load_ptr(this->first));
     int64_t const last = INT_VAL(load_ptr(this->last));
@@ -44,8 +45,9 @@ vm_oop_t VMVector::SetIndexableField(size_t index, vm_oop_t value) {
     if (index < 1 || index > first + last) {
         IndexOutOfBounds(index, (last - first));
     }
+    vm_oop_t curVal = storage->GetIndexableField(first + index - 2);
     storage->SetIndexableField(first + index - 2, value);
-    return value;
+    return curVal;
 }
 
 void VMVector::Append(vm_oop_t value) {
@@ -166,18 +168,20 @@ vm_oop_t VMVector::IndexOf(vm_oop_t other) {
     for (int64_t i = first - 1; i < last - 1; ++i) {
         vm_oop_t current = storage->GetIndexableField(i);
 
-        // Check where integers are tagged or references can be checked
-        if (current == other) {
-            return NEW_INT(i - first + 2);
-        }
-
         // Check where internal values matter i.e. Strings
         if (!IS_TAGGED(current) && !IS_TAGGED(other)) {
             AbstractVMObject* currentObj = AS_OBJ(current);
-
+            cout<<"Taking tagged route: "<< currentObj->AsDebugString() << " vs "
+                << otherObj->AsDebugString() << endl;
             if (currentObj->AsDebugString() == otherObj->AsDebugString()) {
                 return NEW_INT(i - first + 2);
             }
+        }
+
+        // Check where integers are tagged or references can be checked
+        if (current == other) {
+            cout<<"Running tagged route:"<<endl;
+            return NEW_INT(i - first + 2);
         }
     }
     return NEW_INT(-1);
