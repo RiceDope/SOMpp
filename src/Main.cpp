@@ -63,6 +63,12 @@ int32_t main(int32_t argc, char** argv) {
         cout << "\tnot caching integers" << endl;
     }
 
+    if (USE_VECTOR_PRIMITIVES) {
+        cout << "Vector primitives: enabled" << endl;
+    } else {
+        cout << "Vector primitives: disabled" << endl;
+    }
+
     cout << "--------------------------------------" << endl;
 
     Universe::Start(argc, argv);
