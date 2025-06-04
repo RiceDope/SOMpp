@@ -64,9 +64,9 @@ int32_t main(int32_t argc, char** argv) {
     }
 
     if (USE_VECTOR_PRIMITIVES) {
-        cout << "Vector primitives: enabled" << endl;
+        cout << "\tVector primitives: enabled" << endl;
     } else {
-        cout << "Vector primitives: disabled" << endl;
+        cout << "\tVector primitives: disabled" << endl;
     }
 
     cout << "--------------------------------------" << endl;
