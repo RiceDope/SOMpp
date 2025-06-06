@@ -25,12 +25,11 @@ std::string Hasher::GetFile(const std::string& pathWithFileName) {
 
     std::string line;
     std::ostringstream ss;
-    while(std::getline(hashingRead, line)) {
+    while (std::getline(hashingRead, line)) {
         ss << line << '\n';
     }
     const std::string fileContents = ss.str();
     hashingRead.close();
 
     return fileContents;
-
 }

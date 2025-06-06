@@ -579,7 +579,6 @@ VMClass* Universe::LoadClassBasic(VMSymbol* name, VMClass* systemClass) {
 
             // Now load our Vector class and add its primitives
             if (sName == "Vector") {
-
                 if (systemClass != nullptr) {
                     if (systemClass->GetName()->GetStdString() == "Vector") {
                         // Like this to pass clang-tidy checks
@@ -593,8 +592,7 @@ VMClass* Universe::LoadClassBasic(VMSymbol* name, VMClass* systemClass) {
                         const size_t hash = Hasher::HashString(file);
 
                         auto* primitiveContainer =
-                            PrimitiveLoader::GetInstance()->GetObject(
-                                "Vector");
+                            PrimitiveLoader::GetInstance()->GetObject("Vector");
                         auto* vectorInstance =
                             dynamic_cast<_Vector*>(primitiveContainer);
                         if (vectorInstance != nullptr) {

@@ -4,6 +4,7 @@ on: [push, pull_request]
 
 jobs:
   test_soms:
+    name: Run (Compiler=${{matrix.compiler}} GC=${{matrix.gc}} ${{matrix.integers}} -DUSE_VECTOR_PRIMITIVES=${{matrix.vector}})
     runs-on: ubuntu-24.04
     # continue-on-error: true
     strategy:
