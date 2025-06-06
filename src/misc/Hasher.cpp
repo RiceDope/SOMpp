@@ -1,13 +1,17 @@
 #include "Hasher.h"
 
-#include <string>
+#include <cstddef>
 #include <fstream>
+#include <functional>
+#include <ios>
 #include <sstream>
+#include <string>
+
 using namespace std;
 
 /* Hash a string with standard cpp hash function */
 size_t Hasher::HashString(const std::string& str) {
-    std::hash<std::string> hasher;
+    const std::hash<std::string> hasher;
     return hasher(str);
 }
 
@@ -16,7 +20,7 @@ std::string Hasher::GetFile(const std::string& pathWithFileName) {
     hashingRead.open(pathWithFileName.c_str(), std::ios_base::in);
     if (!hashingRead.is_open()) {
         // file not found
-        return nullptr;
+        return "";
     }
 
     std::string line;

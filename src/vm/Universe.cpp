@@ -32,7 +32,6 @@
 #include <cstdlib>
 #include <cstring>
 #include <fstream>
-#include <functional>
 #include <iostream>
 #include <map>
 #include <sstream>
@@ -44,8 +43,8 @@
 #include "../compiler/SourcecodeCompiler.h"
 #include "../interpreter/bytecodes.h"
 #include "../memory/Heap.h"
-#include "../misc/defs.h"
 #include "../misc/Hasher.h"
+#include "../misc/defs.h"
 #include "../primitives/Vector.h"
 #include "../primitivesCore/PrimitiveLoader.h"
 #include "../vmobjects/IntegerBox.h"
@@ -584,14 +583,14 @@ VMClass* Universe::LoadClassBasic(VMSymbol* name, VMClass* systemClass) {
                 if (systemClass != nullptr) {
                     if (systemClass->GetName()->GetStdString() == "Vector") {
                         // Like this to pass clang-tidy checks
-                        ifstream hashingRead{};
+                        const ifstream hashingRead{};
                         std::string fname = i;
                         fname += fileSeparator;
                         fname += sName;
                         fname += ".som";
 
-                        std::string file = Hasher::GetFile(fname);
-                        size_t hash = Hasher::HashString(file);
+                        const std::string file = Hasher::GetFile(fname);
+                        const size_t hash = Hasher::HashString(file);
 
                         auto* primitiveContainer =
                             PrimitiveLoader::GetInstance()->GetObject(
