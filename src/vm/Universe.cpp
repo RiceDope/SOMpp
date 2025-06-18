@@ -591,8 +591,10 @@ VMClass* Universe::LoadClassBasic(VMSymbol* name, VMClass* systemClass) {
                         auto* bytecodes = method->GetBytecodes();
                         // NOLINT
                         const std::string bytecodeStr(
-                            reinterpret_cast<const char*>(bytecodes),
+                            static_cast<const char*>(
+                                static_cast<const void*>(bytecodes)),
                             method->GetNumberOfBytecodes());
+
                         const std::string signature =
                             method->GetSignature()->GetStdString();
                         (*hashes)[signature] =
