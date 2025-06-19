@@ -120,6 +120,9 @@ public:
     }
 
     [[nodiscard]] size_t GetNumberOfBytecodes() const { return bcLength; }
+
+    [[nodiscard]] size_t GetBytecodeHash() const;
+
     void SetHolder(VMClass* hld) override;
     void SetHolderAll(VMClass* hld) const;
 
