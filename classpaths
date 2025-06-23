@@ -1,0 +1,5 @@
+build: mkdir inttesting && cd inttesting && cmake .. -DUSE_TAGGING=false -DCACHE_INTEGER=true -DGC_TYPE=COPYING -DCMAKE_BUILD_TYPE=Debug -DUSE_VECTOR_PRIMITIVES=true && make
+executable: ./inttesting/SOM++
+classpath: ./Smalltalk
+inttesting-loc: ./core-lib/IntegrationTests/
+cleanup: rm -r inttesting
