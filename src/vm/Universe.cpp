@@ -83,6 +83,7 @@ map<GCSymbol*, gc_oop_t> Universe::globals;
 map<uint8_t, GCClass*> Universe::blockClassesByNoOfArgs;
 vector<std::string> Universe::classPath;
 size_t Universe::heapSize;
+bool PRINT_HASHES = false;
 
 void Universe::Start(int32_t argc, char** argv) {
     BasicInit();
@@ -211,6 +212,8 @@ vector<std::string> Universe::handleArguments(int32_t argc, char** argv) {
         } else if ((strncmp(argv[i], "-h", 2) == 0) ||
                    (strncmp(argv[i], "--help", 6) == 0)) {
             printUsageAndExit(argv[0]);
+        } else if ((strncmp(argv[i], "--hashes", 8)) == 0) {
+            PRINT_HASHES = true;
         } else {
             vector<std::string> extPathTokens = vector<std::string>(2);
             std::string const tmpString = std::string(argv[i]);

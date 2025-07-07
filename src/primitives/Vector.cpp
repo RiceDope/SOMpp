@@ -106,21 +106,22 @@ _Vector::_Vector() {
         return;
     }
 
-    // These bytecode hashes may need to be updated occationally
+    // These bytecode hashes may need to be updated occasionally
     // If they need to be updated, the corresponding primitive implementations
     // likely need to be adapted, too.
+    // In order to print out hashes use the --hashes flag when executing SOM++
 
-    Add("at:", false, &vecAt, 1078057473, &vecAtAWFY, 3362920797);
-    Add("at:put:", false, &vecAtPut, 1078057473, &vecAtPutAWFY, 3362920797);
+    Add("at:", false, &vecAt, 315201797, &vecAtAWFY, 3362920797);
+    Add("at:put:", false, &vecAtPut, 315201797, &vecAtPutAWFY, 3362920797);
 
-    Add("first", &vecFirst, false, 1725815466);
-    Add("last", &vecLast, false, 1725815466);
-    Add("append:", &vecAppend, false, 318093777);
-    Add("remove", &removeLast, false, 1725815466);
-    Add("remove:", &removeObject, false, 3449745100);
-    Add("size", &vecSize, false, 198675311);
-    Add("capacity", &capacity, false, 4108221081);
-    Add("asArray", &asArray, false, 3449745100);
-    Add("removeFirst", &removeFirst, false, 1725815466);
+    Add("first", &vecFirst, false, 781539645);
+    Add("last", &vecLast, false, 997610644);
+    Add("append:", &vecAppend, false, 3383122912);
+    Add("remove", &removeLast, false, 146838394);
+    Add("remove:", &removeObject, false, 3385671007);
+    Add("size", &vecSize, false, 582059043);
+    Add("capacity", &capacity, false, 1600305580);
+    Add("asArray", &asArray, false, 2100819204);
+    Add("removeFirst", &removeFirst, false, 2083891304);
     Add("removeAll", &removeAll, false, 1510429688);
 };

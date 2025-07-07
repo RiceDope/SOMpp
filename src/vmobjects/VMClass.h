@@ -97,3 +97,5 @@ private:
     GCArray* instanceInvokables;
     GCObject* superClass;
 };
+
+extern bool PRINT_HASHES;
