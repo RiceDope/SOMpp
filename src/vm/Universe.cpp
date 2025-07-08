@@ -74,6 +74,7 @@ static gc_oop_t prebuildInts[INT_CACHE_MAX_VALUE - INT_CACHE_MIN_VALUE + 1];
 
 uint8_t dumpBytecodes;
 uint8_t gcVerbosity;
+bool printCoreLibMethodHashes = false;
 
 static std::string bm_name;
 
@@ -83,7 +84,6 @@ map<GCSymbol*, gc_oop_t> Universe::globals;
 map<uint8_t, GCClass*> Universe::blockClassesByNoOfArgs;
 vector<std::string> Universe::classPath;
 size_t Universe::heapSize;
-bool PRINT_HASHES = false;
 
 void Universe::Start(int32_t argc, char** argv) {
     BasicInit();
@@ -212,8 +212,8 @@ vector<std::string> Universe::handleArguments(int32_t argc, char** argv) {
         } else if ((strncmp(argv[i], "-h", 2) == 0) ||
                    (strncmp(argv[i], "--help", 6) == 0)) {
             printUsageAndExit(argv[0]);
-        } else if ((strncmp(argv[i], "--hashes", 8)) == 0) {
-            PRINT_HASHES = true;
+        } else if ((strncmp(argv[i], "-prim-hashes", 12)) == 0) {
+            printCoreLibMethodHashes = true;
         } else {
             vector<std::string> extPathTokens = vector<std::string>(2);
             std::string const tmpString = std::string(argv[i]);
@@ -283,6 +283,10 @@ void Universe::printUsageAndExit(char* executable) {
     cout << "         set search path for application classes\n";
     cout << "    -d   enable disassembling (twice for tracing)\n";
     cout << "    -cfg print VM configuration\n";
+    cout << "    -prim-hashes  print hashes of core-lib methods\n";
+    cout << "                  that have primitive replacements and exit with "
+            "error\n";
+    cout << "                  when they do not match expected results\n";
     cout
         << "    -g   enable garbage collection details:\n"
         << "         1x - print statistics when VM shuts down\n"
@@ -291,7 +295,7 @@ void Universe::printUsageAndExit(char* executable) {
         << "\n";
     cout << "    -HxMB set the heap size to x MB (default: 1 MB)\n";
     cout << "    -HxKB set the heap size to x KB (default: 1 MB)\n";
-    cout << "    -h  show this help\n";
+    cout << "    -h|--help show this help\n";
 
     Quit(ERR_SUCCESS);
 }
