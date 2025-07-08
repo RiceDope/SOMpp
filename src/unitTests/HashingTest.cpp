@@ -1,7 +1,6 @@
 #include "HashingTest.h"
 
 #include <cppunit/TestAssert.h>
-#include <cstddef>
 #include <cstdint>
 #include <cstring>
 
